@@ -37,7 +37,7 @@ const ProductList = () => (
 
               <div className="mt-2 flex items-baseline justify-between">
                 <span className="text-2xl font-bold text-green-600 flex">
-                  <p className='text-indigo-700'>Price - </p>  {p.price}
+                  <p className='text-indigo-700'>Price - </p>  {p.price || 'N/A'}
                 </span>
               </div>
               <div className="">

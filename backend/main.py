@@ -13,6 +13,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+
 from scraper.scraper import Product_Scraper
 from cleaner.cleaner import ProductCleaner
 
@@ -33,6 +34,11 @@ def run_scraper(target_count=100):
     scraper = Product_Scraper(
         delay_range=(3, 6)
     )
+    
+    brands = scraper.extract_brands_from_dropdown()
+    scraper.save_brands(brands, "data/brands.json")
+    print(f"📖 Extracted {len(brands)} brands")
+
     
     products = scraper.scrape_all(target_count=target_count)
     

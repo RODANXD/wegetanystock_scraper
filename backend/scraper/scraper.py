@@ -9,6 +9,7 @@ import logging
 from typing import List, Dict, Optional
 from urllib.parse import urljoin
 
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -20,12 +21,11 @@ logger = logging.getLogger(__name__)
 class Product_Scraper:
     """Scraper using cloudscraper to bypass Cloudflare"""
     
-    BASE_URL = "https://www.wegetanystock.com"
+    BASE_URL = "https://www.wegetanystock.com/grocery"
     
-    CATEGORY_URLS = [
-        "/drinks",
-        "/biscuits-snacks-sweets/cakes",
-    ]
+    # CATEGORY_URLS = [
+    #     "/grocery",
+    # ]
     
     def __init__(self, delay_range: tuple = (2, 5)):
         
@@ -110,6 +110,57 @@ class Product_Scraper:
             logger.error(f"❌ Error fetching {url}: {e}")
             return None
     
+    def extract_brands_from_dropdown(self) -> List[str]:
+        logger.info("🔍 Extracting brands from Brands dropdown")
+
+        soup = self.fetch_page(self.BASE_URL)
+        # print("@@@@@",soup)
+        if not soup:
+            return []
+
+        brands = []
+
+        # 1️⃣ Find all dropdown containers
+        dropdown_containers = soup.select('div[x-data]')
+
+        brands_container = None
+
+        for container in dropdown_containers:
+            p = container.select_one('div > p')
+            if p and p.get_text(strip=True).lower() == "brands":
+                brands_container = container
+                break
+
+        if not brands_container:
+            logger.warning("❌ Brands dropdown container not found")
+            return []
+
+        # 2️⃣ Find the <ul> inside this container
+        ul = brands_container.select_one('ul[x-show="open"]')
+
+        if not ul:
+            logger.warning("❌ Brands <ul> not found inside container")
+            return []
+
+        # 3️⃣ Extract brand names
+        for li in ul.select('li'):
+            brand = li.get_text(strip=True)
+            if brand:
+                brands.append(brand)
+
+        brands = sorted(set(brands))
+        logger.info(f"✅ Extracted {len(brands)} brands")
+
+        return brands
+
+    def save_brands(self, brands: List[str], filepath: str):
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(brands, f, indent=2, ensure_ascii=False)
+
+        logger.info(f"💾 Saved {len(brands)} brands to {filepath}")
+
+
     def extract_price_from_title(self, title: str) -> Optional[str]:
         """Extract price from product title"""
         patterns = [
@@ -124,6 +175,64 @@ class Product_Scraper:
                 return f"£{match.group(1)}"
         return None
     
+    def extract_product_page_details(self, product_url: str) -> Dict:
+        """
+        Extract Ingredients, Safety Warning, Nutrition table, etc.
+        from product page <details> sections
+        """
+        data = {}
+
+        soup = self.fetch_page(product_url)
+        if not soup:
+            return data
+
+        # Find all <details> blocks
+        details_blocks = soup.select("details")
+
+        nutrition_data = {}
+
+        for block in details_blocks:
+            summary = block.select_one("summary")
+            if not summary:
+                continue
+
+            section_title = summary.get_text(strip=True).lower()
+
+            # -----------------------
+            # INGREDIENTS
+            # -----------------------
+            if "ingredient" in section_title:
+                p = block.select_one("p")
+                if p:
+                    data["Ingredients List"] = p.get_text(" ", strip=True)
+
+            # -----------------------
+            # SAFETY WARNING
+            # -----------------------
+            elif "safety" in section_title:
+                p = block.select_one("p")
+                if p:
+                    data["Safety Warning"] = p.get_text(" ", strip=True)
+
+            # -----------------------
+            # NUTRITION TABLE
+            # -----------------------
+            elif "nutrition" in section_title:
+                rows = block.select("table tr")
+
+                for row in rows:
+                    cols = row.select("td, th")
+                    if len(cols) >= 2:
+                        key = cols[0].get_text(" ", strip=True)
+                        value = cols[1].get_text(" ", strip=True)
+                        nutrition_data[key] = value
+
+        # Flatten nutrition into main dict
+        for k, v in nutrition_data.items():
+            data[k] = v
+
+        return data
+
     def extract_volume_weight(self, title: str) -> Optional[str]:
         """Extract volume or weight from title"""
         patterns = [
@@ -243,11 +352,15 @@ class Product_Scraper:
         page = 1
         
         while len(products) < max_products:
-            # Build page URL
-            if '?' in category_url:
-                url = f"{self.BASE_URL}{category_url}&page={page}"
+            # Build page URL - if category_url is empty, use BASE_URL directly
+            if category_url:
+                if '?' in category_url:
+                    url = f"{self.BASE_URL}{category_url}&page={page}"
+                else:
+                    url = f"{self.BASE_URL}{category_url}?page={page}"
             else:
-                url = f"{self.BASE_URL}{category_url}?page={page}"
+                # Use BASE_URL directly when no category_url provided
+                url = f"{self.BASE_URL}?page={page}"
             
             soup = self.fetch_page(url)
             if not soup:
@@ -305,12 +418,25 @@ class Product_Scraper:
                     break
                 
                 product_data = self.extract_product_data(elem)
+                
+                if len(products) < max_products and product_data and product_data.get("url"):
+                    self.random_delay()
+                    details = self.extract_product_page_details(product_data["url"])
+                    product_data.update(details)
+
+                
+
                 if product_data and product_data.get('name'):
-                    products.append(product_data)
-                    new_count += 1
-                    logger.info(f"  ✓ {product_data['name'][:50]}...")
-            
+        # Final check before adding to ensure we don't exceed max_products
+                    if len(products) < max_products:
+                        products.append(product_data)
+                        new_count += 1
+                        logger.info(f"  ✓ {product_data['name'][:50]}...")
+                        
             logger.info(f"Page {page}: Added {new_count} products (Total: {len(products)})")
+            
+            if len(products) >= max_products:
+                break
             
             if new_count == 0:
                 break
@@ -318,7 +444,7 @@ class Product_Scraper:
             page += 1
             self.random_delay()
             
-            if page > 10:  
+            if page > 100:  
                 break
         
         return products
@@ -337,27 +463,45 @@ class Product_Scraper:
             self.fetch_page(self.BASE_URL)
             self.random_delay()
             
-            for category_url in self.CATEGORY_URLS:
+            # Using BASE_URL directly instead of iterating through CATEGORY_URLS
+            # for category_url in self.CATEGORY_URLS:
+            #     if len(all_products) >= target_count:
+            #         break
+            #     
+            #     logger.info(f"\n📁 Category: {category_url}")
+            #     logger.info("-" * 40)
+            #     
+            #     remaining = target_count - len(all_products)
+            #     products = self.scrape_category(category_url, max_products=remaining + 20)
+            #     
+            #     for product in products:
+            #         name_key = product.get('name', '').lower().strip()
+            #         if name_key and name_key not in seen_names:
+            #             seen_names.add(name_key)
+            #             all_products.append(product)
+            #         
+            #         if len(all_products) >= target_count:
+            #             break
+            #     
+            #     logger.info(f"Total so far: {len(all_products)}")
+            #     self.random_delay()
+            
+            # Scrape from BASE_URL directly
+            logger.info(f"\n📁 Scraping from: {self.BASE_URL}")
+            logger.info("-" * 40)
+            
+            products = self.scrape_category("", max_products=target_count + 0)
+            
+            for product in products:
+                name_key = product.get('name', '').lower().strip()
+                if name_key and name_key not in seen_names:
+                    seen_names.add(name_key)
+                    all_products.append(product)
+                
                 if len(all_products) >= target_count:
                     break
-                
-                logger.info(f"\n📁 Category: {category_url}")
-                logger.info("-" * 40)
-                
-                remaining = target_count - len(all_products)
-                products = self.scrape_category(category_url, max_products=remaining + 20)
-                
-                for product in products:
-                    name_key = product.get('name', '').lower().strip()
-                    if name_key and name_key not in seen_names:
-                        seen_names.add(name_key)
-                        all_products.append(product)
-                    
-                    if len(all_products) >= target_count:
-                        break
-                
-                logger.info(f"Total so far: {len(all_products)}")
-                self.random_delay()
+            
+            logger.info(f"Total scraped: {len(all_products)}")
             
         except Exception as e:
             logger.error(f"Error during scraping: {e}")

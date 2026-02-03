@@ -1,141 +1,128 @@
+#!/usr/bin/env python3
+# main_integrated.py
 """
-Main Entry Point - Run Scraper and Cleaner
+Main Pipeline Runner with Integrated Cleaner
+Includes brand detection, product cleaning, and description extraction
 """
 
-import json
-import os
-import sys
-import logging
-
-
-logging.basicConfig(level=logging.DEBUG)
-
-
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-
-from scraper.scraper import Product_Scraper
-from cleaner.cleaner import ProductCleaner
-
-
-def get_data_path(filename):
-    """Get path to data file"""
-    data_dir = os.path.join(os.path.dirname(__file__), 'data')
-    os.makedirs(data_dir, exist_ok=True)
-    return os.path.join(data_dir, filename)
-
-
-def run_scraper(target_count=100):
-    """Run the web scraper"""
-    print("\n" + "=" * 60)
-    print("🕷️  STEP 1: SCRAPING PRODUCTS (Cloudflare Bypass)")
-    print("=" * 60)
-    
-    scraper = Product_Scraper(
-        delay_range=(3, 6)
-    )
-    
-    brands = scraper.extract_brands_from_dropdown()
-    scraper.save_brands(brands, "data/brands.json")
-    print(f"📖 Extracted {len(brands)} brands")
-
-    
-    products = scraper.scrape_all(target_count=target_count)
-    
-    if products:
-        output_path = get_data_path('raw_products.json')
-        scraper.save_to_json(products, output_path)
-        print(f"\n✅ Scraped {len(products)} products")
-        print(f"📁 Saved to: {output_path}")
-        return products
-    else:
-        print("❌ No products scraped!")
-        return []
-
-
-def run_cleaner():
-    """Run the data cleaner"""
-    print("\n" + "=" * 60)
-    print("🧹 STEP 2: CLEANING DATA")
-    print("=" * 60)
-    
-    input_path = get_data_path('raw_products.json')
-    output_path = get_data_path('cleaned_products.json')
-    frontend_path = r'C:\Users\ankun\NewdjangoEnv\Product_scraping\frontend\src\data\cleaned_products.json'
-    
-    if not os.path.exists(input_path):
-        print(f"❌ File not found: {input_path}")
-        print("Please run the scraper first!")
-        return []
-    
-    with open(input_path, 'r', encoding='utf-8') as f:
-        products = json.load(f)
-    
-    print(f"📖 Loaded {len(products)} products")
-    
-    cleaner = ProductCleaner()
-    cleaned_products = cleaner.clean_products(products)
-    
-    
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(cleaned_products, f, indent=2, ensure_ascii=False)
-    
-    
-    os.makedirs(os.path.dirname(frontend_path), exist_ok=True)
-    with open(frontend_path, 'w', encoding='utf-8') as f:
-        json.dump(cleaned_products, f, indent=2, ensure_ascii=False)
-    
-    print(f"\n✅ Cleaned {len(cleaned_products)} products")
-    print(f"📁 Saved to: {output_path}")
-    print(f"📁 Saved to: {frontend_path}")
-    
-
-    
-    for product in cleaned_products[:5]:
-        print(f"\n  Original:  {product.get('original_name', 'N/A')}")
-        print(f"  Cleaned:   {product.get('cleaned_name', 'N/A')}")
-        print(f"  Brand:     {product.get('brand', 'Not detected')}")
-        print(f"  Slug:      {product.get('slug', 'N/A')}")
-        print(f"  Multipack: {product.get('is_multipack', False)}")
-    
-    return cleaned_products
+import argparse
+from pathlib import Path
+from cleaner_integrated import IntegratedProductCleaner, clean_and_merge
 
 
 def main():
-    """Main function"""
-    import argparse
+    """
+    Main entry point for the integrated data cleaning pipeline
+    """
     
-    parser = argparse.ArgumentParser(description='Product Scraper & Cleaner')
-    parser.add_argument('--count', type=int, default=100, help='Number of products to scrape')
-    parser.add_argument('--scrape-only', action='store_true', help='Only run scraper')
-    parser.add_argument('--clean-only', action='store_true', help='Only run cleaner')
+    parser = argparse.ArgumentParser(
+        description='Clean and normalize e-commerce product data with brand detection'
+    )
+    
+    parser.add_argument(
+        '--config',
+        type=str,
+        help='Path to JSON config file with source definitions',
+        default=None
+    )
+    
+    parser.add_argument(
+        '--output',
+        type=str,
+        help='Output file path for master JSON',
+        default='master_products.json'
+    )
+    
+    parser.add_argument(
+        '--brands',
+        type=str,
+        help='Path to brands.json file',
+        default=None
+    )
+    
+    parser.add_argument(
+        '--sources',
+        nargs='+',
+        help='Source files: format is "file:name:url"',
+        default=None
+    )
     
     args = parser.parse_args()
     
-    print("\n" + "-" * 63)
-    print("🚀 PRODUCT SCRAPER & CLEANER")
-    print("-" * 63)
+    # Determine source configuration
+    if args.config:
+        # Load from config file
+        import json
+        with open(args.config, 'r') as f:
+            config = json.load(f)
+            source_configs = config.get('sources', [])
     
-    if args.clean_only:
-        run_cleaner()
-    elif args.scrape_only:
-        run_scraper(target_count=args.count)
-    else:
-        # Run both
-        products = run_scraper(target_count=args.count)
-        
-        if products:
-            cleaned = run_cleaner()
+    elif args.sources:
+        # Parse from command line
+        source_configs = []
+        for source_spec in args.sources:
+            parts = source_spec.split(':')
+            if len(parts) != 3:
+                print(f"⚠️  Invalid source spec: {source_spec}")
+                print("   Expected format: file:name:url")
+                continue
             
-            print("\n" + "=" * 63)
-            print("🎉 ALL DONE!")
-            print("=" * 63)
-            print(f"\n📊 Summary:")
-            print(f"   - Raw products:     {len(products)}")
-            print(f"   - Cleaned products: {len(cleaned)}")
-            print(f"\n📁 Output files:")
-            print(f"   - {get_data_path('raw_products.json')}")
-            print(f"   - {get_data_path('cleaned_products.json')}")
+            source_configs.append({
+                'file': parts[0],
+                'name': parts[1],
+                'url': parts[2]
+            })
+    
+    else:
+        # Use default example
+        print("No sources specified. Using example configuration...")
+        source_configs = [
+            {
+                'file': 'data/raw_amazon.json',
+                'name': 'Amazon',
+                'url': 'https://amazon.com'
+            },
+            {
+                'file': 'data/raw_walmart.json',
+                'name': 'Walmart',
+                'url': 'https://walmart.com'
+            }
+        ]
+    
+    # Validate source files exist
+    valid_sources = []
+    for config in source_configs:
+        if not Path(config['file']).exists():
+            print(f"⚠️  File not found: {config['file']} - skipping")
+            continue
+        valid_sources.append(config)
+    
+    if not valid_sources:
+        print("\n❌ ERROR: No valid source files found!")
+        print("\nTo create example data, run:")
+        print("  python create_example_data.py")
+        print("\nOr specify sources:")
+        print("  python main_integrated.py --sources data/file1.json:Site1:https://site1.com")
+        return
+    
+    # Run the pipeline
+    print("\n" + "="*70)
+    print("INTEGRATED PRODUCT DATA CLEANING PIPELINE")
+    print("="*70)
+    print("✓ Brand Detection with Auto-Learning")
+    print("✓ Product Name Cleaning")
+    print("✓ Description Extraction")
+    print("✓ Field Normalization")
+    print("✓ Smart Inference")
+    print("="*70)
+    
+    products = clean_and_merge(valid_sources, args.output, args.brands)
+    
+    print("\n" + "="*70)
+    print("✓ PIPELINE COMPLETE")
+    print("="*70)
+    
+    return products
 
 
 if __name__ == "__main__":

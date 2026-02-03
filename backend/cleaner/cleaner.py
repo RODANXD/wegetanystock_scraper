@@ -82,6 +82,8 @@ class ProductCleaner:
         self.brand_detector = BrandDetector()
     
     
+    # remove product where id = null
+    
     
     def _remove_descriptors(self, name: str) -> str:
         result = name
@@ -96,6 +98,8 @@ class ProductCleaner:
         """
         if not name:
             return ""
+        
+        name = str(name)
         
         cleaned = name
         cleaned = re.sub(r'\s+\d{10,}$', '', cleaned)
@@ -120,7 +124,9 @@ class ProductCleaner:
         return result
     
     def standardize_units(self, name: str) -> str:
-       
+        if not name:
+            return ""
+        name = str(name)
         result = name
         
         
@@ -210,6 +216,9 @@ class ProductCleaner:
         Detect multipack information
         Returns dict with 'count', 'size', 'unit' or None
         """
+        if not name:
+            return ""
+        name = str(name)
         patterns = [
             # 6x250ml, 4x330ml
             r'(\d+)\s*[xX×]\s*(\d+(?:\.\d+)?)\s*(ml|g|l|kg)',
@@ -249,6 +258,7 @@ class ProductCleaner:
        
         if not name:
             return ""
+        name = str(name)
         
         # First clean the name
         cleaned = self.clean_product_name(name)
@@ -282,8 +292,14 @@ class ProductCleaner:
         cleaned['cleaned_name'] = self.clean_product_name(original_name)
         cleaned['original_name'] = original_name
         
-        # Detect brand
-        cleaned['brand'] = self.brand_detector.detect_brand(original_name)
+        #existing brand from scraped data, only detect missing data
+        existing_brand = product.get('brand')
+        if existing_brand:
+            cleaned['brand'] = existing_brand
+        else:
+            detected_brand = self.brand_detector.detect_brand(original_name)
+            cleaned['brand'] = detected_brand if detected_brand else None
+        
         
         # Detect multipack
         multipack_info = self.detect_multipack(original_name)
@@ -296,8 +312,25 @@ class ProductCleaner:
         return cleaned
     
     def clean_products(self, products: List[Dict]) -> List[Dict]:
-        """Clean a list of products"""
-        return [self.clean_product(p) for p in products]
+        """
+        Clean a list of products
+        Filters out products with null id or name
+        """
+        cleaned_products = []
+        skipped_count = 0
+        
+        for p in products:
+            # Skip products with null id or name
+            if not p.get('id') or not p.get('name'):
+                skipped_count += 1
+                continue
+            
+            cleaned_products.append(self.clean_product(p))
+        
+        if skipped_count > 0:
+            print(f"⚠️  Skipped {skipped_count} products with null id or name")
+        
+        return cleaned_products
 
 
 # Export singleton instance

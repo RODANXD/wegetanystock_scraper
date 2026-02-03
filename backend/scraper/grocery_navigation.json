@@ -1,0 +1,360 @@
+{
+  "main_category": "GROCERIES",
+  "categories": [
+    {
+      "category_name": "GENERAL GROCERIES",
+      "subcategory_count": 6,
+      "subcategories": [
+        {
+          "name": "TAMARIND",
+          "url": "https://www.lakshmiwholesale.com/collections/tamarind",
+          "relative_path": "/collections/tamarind",
+          "collection_slug": "tamarind",
+          "products_api": "https://www.lakshmiwholesale.com/collections/tamarind/products.json"
+        },
+        {
+          "name": "ASAFOETIDA",
+          "url": "https://www.lakshmiwholesale.com/collections/asafoetida",
+          "relative_path": "/collections/asafoetida",
+          "collection_slug": "asafoetida",
+          "products_api": "https://www.lakshmiwholesale.com/collections/asafoetida/products.json"
+        },
+        {
+          "name": "RICE FLAKES & PUFFED RICE",
+          "url": "https://www.lakshmiwholesale.com/collections/rice-flakes-and-puffed-rice",
+          "relative_path": "/collections/rice-flakes-and-puffed-rice",
+          "collection_slug": "rice-flakes-and-puffed-rice",
+          "products_api": "https://www.lakshmiwholesale.com/collections/rice-flakes-and-puffed-rice/products.json"
+        },
+        {
+          "name": "SOYA CHUNKS",
+          "url": "https://www.lakshmiwholesale.com/collections/soya-chunks",
+          "relative_path": "/collections/soya-chunks",
+          "collection_slug": "soya-chunks",
+          "products_api": "https://www.lakshmiwholesale.com/collections/soya-chunks/products.json"
+        },
+        {
+          "name": "DRY COCONUT",
+          "url": "https://www.lakshmiwholesale.com/collections/dry-coconut",
+          "relative_path": "/collections/dry-coconut",
+          "collection_slug": "dry-coconut",
+          "products_api": "https://www.lakshmiwholesale.com/collections/dry-coconut/products.json"
+        },
+        {
+          "name": "RESTAURANT PACKS",
+          "url": "https://www.lakshmiwholesale.com/collections/restaurant-packs",
+          "relative_path": "/collections/restaurant-packs",
+          "collection_slug": "restaurant-packs",
+          "products_api": "https://www.lakshmiwholesale.com/collections/restaurant-packs/products.json"
+        }
+      ]
+    },
+    {
+      "category_name": "LENTILS & PULSES",
+      "subcategory_count": 10,
+      "subcategories": [
+        {
+          "name": "TOOR DHAL",
+          "url": "https://www.lakshmiwholesale.com/collections/toor-dhal",
+          "relative_path": "/collections/toor-dhal",
+          "collection_slug": "toor-dhal",
+          "products_api": "https://www.lakshmiwholesale.com/collections/toor-dhal/products.json"
+        },
+        {
+          "name": "URAD DHAL",
+          "url": "https://www.lakshmiwholesale.com/collections/urad-dhal",
+          "relative_path": "/collections/urad-dhal",
+          "collection_slug": "urad-dhal",
+          "products_api": "https://www.lakshmiwholesale.com/collections/urad-dhal/products.json"
+        },
+        {
+          "name": "KABULI CHANA",
+          "url": "https://www.lakshmiwholesale.com/collections/kabuli-chana",
+          "relative_path": "/collections/kabuli-chana",
+          "collection_slug": "kabuli-chana",
+          "products_api": "https://www.lakshmiwholesale.com/collections/kabuli-chana/products.json"
+        },
+        {
+          "name": "BROWN KALA CHANA",
+          "url": "https://www.lakshmiwholesale.com/collections/brown-kala-chana",
+          "relative_path": "/collections/brown-kala-chana",
+          "collection_slug": "brown-kala-chana",
+          "products_api": "https://www.lakshmiwholesale.com/collections/brown-kala-chana/products.json"
+        },
+        {
+          "name": "CHANA DHAL",
+          "url": "https://www.lakshmiwholesale.com/collections/chana-dal",
+          "relative_path": "/collections/chana-dal",
+          "collection_slug": "chana-dal",
+          "products_api": "https://www.lakshmiwholesale.com/collections/chana-dal/products.json"
+        },
+        {
+          "name": "MOONG DHAL",
+          "url": "https://www.lakshmiwholesale.com/collections/moong-dhal",
+          "relative_path": "/collections/moong-dhal",
+          "collection_slug": "moong-dhal",
+          "products_api": "https://www.lakshmiwholesale.com/collections/moong-dhal/products.json"
+        },
+        {
+          "name": "COW BEANS",
+          "url": "https://www.lakshmiwholesale.com/collections/natures-red-cow-beans-500g",
+          "relative_path": "/collections/natures-red-cow-beans-500g",
+          "collection_slug": "natures-red-cow-beans-500g",
+          "products_api": "https://www.lakshmiwholesale.com/collections/natures-red-cow-beans-500g/products.json"
+        },
+        {
+          "name": "RED KIDNEY BEANS",
+          "url": "https://www.lakshmiwholesale.com/collections/red-kidney-beans",
+          "relative_path": "/collections/red-kidney-beans",
+          "collection_slug": "red-kidney-beans",
+          "products_api": "https://www.lakshmiwholesale.com/collections/red-kidney-beans/products.json"
+        },
+        {
+          "name": "GREEN MOONG BEANS",
+          "url": "https://www.lakshmiwholesale.com/collections/green-moong-beans",
+          "relative_path": "/collections/green-moong-beans",
+          "collection_slug": "green-moong-beans",
+          "products_api": "https://www.lakshmiwholesale.com/collections/green-moong-beans/products.json"
+        },
+        {
+          "name": "BLACK EYE BEANS",
+          "url": "https://www.lakshmiwholesale.com/collections/black-eye-beans",
+          "relative_path": "/collections/black-eye-beans",
+          "collection_slug": "black-eye-beans",
+          "products_api": "https://www.lakshmiwholesale.com/collections/black-eye-beans/products.json"
+        }
+      ]
+    },
+    {
+      "category_name": "NOODLES & VERMICELLI",
+      "subcategory_count": 5,
+      "subcategories": [
+        {
+          "name": "INSTANT NOODLES",
+          "url": "https://www.lakshmiwholesale.com/collections/instant-noodles",
+          "relative_path": "/collections/instant-noodles",
+          "collection_slug": "instant-noodles",
+          "products_api": "https://www.lakshmiwholesale.com/collections/instant-noodles/products.json"
+        },
+        {
+          "name": "MILLET NOODLES",
+          "url": "https://www.lakshmiwholesale.com/collections/millet-noodles",
+          "relative_path": "/collections/millet-noodles",
+          "collection_slug": "millet-noodles",
+          "products_api": "https://www.lakshmiwholesale.com/collections/millet-noodles/products.json"
+        },
+        {
+          "name": "ROASTED VERMICELLI",
+          "url": "https://www.lakshmiwholesale.com/collections/roasted-vermicelli",
+          "relative_path": "/collections/roasted-vermicelli",
+          "collection_slug": "roasted-vermicelli",
+          "products_api": "https://www.lakshmiwholesale.com/collections/roasted-vermicelli/products.json"
+        },
+        {
+          "name": "UNROASTED VERMICELLI",
+          "url": "https://www.lakshmiwholesale.com/collections/unroasted-vermicelli",
+          "relative_path": "/collections/unroasted-vermicelli",
+          "collection_slug": "unroasted-vermicelli",
+          "products_api": "https://www.lakshmiwholesale.com/collections/unroasted-vermicelli/products.json"
+        },
+        {
+          "name": "MILLET VERMICELLI",
+          "url": "https://www.lakshmiwholesale.com/collections/millet-vermicelli",
+          "relative_path": "/collections/millet-vermicelli",
+          "collection_slug": "millet-vermicelli",
+          "products_api": "https://www.lakshmiwholesale.com/collections/millet-vermicelli/products.json"
+        }
+      ]
+    },
+    {
+      "category_name": "SPICES & MASALA",
+      "subcategory_count": 2,
+      "subcategories": [
+        {
+          "name": "MASALA POWDER",
+          "url": "https://www.lakshmiwholesale.com/collections/masala-powder",
+          "relative_path": "/collections/masala-powder",
+          "collection_slug": "masala-powder",
+          "products_api": "https://www.lakshmiwholesale.com/collections/masala-powder/products.json"
+        },
+        {
+          "name": "WHOLE SPICES",
+          "url": "https://www.lakshmiwholesale.com/collections/whole-spices",
+          "relative_path": "/collections/whole-spices",
+          "collection_slug": "whole-spices",
+          "products_api": "https://www.lakshmiwholesale.com/collections/whole-spices/products.json"
+        }
+      ]
+    },
+    {
+      "category_name": "OIL & GHEE",
+      "subcategory_count": 2,
+      "subcategories": [
+        {
+          "name": "COLD PRESSED OIL",
+          "url": "https://www.lakshmiwholesale.com/collections/cold-pressed-oils",
+          "relative_path": "/collections/cold-pressed-oils",
+          "collection_slug": "cold-pressed-oils",
+          "products_api": "https://www.lakshmiwholesale.com/collections/cold-pressed-oils/products.json"
+        },
+        {
+          "name": "OIL",
+          "url": "https://www.lakshmiwholesale.com/collections/oils",
+          "relative_path": "/collections/oils",
+          "collection_slug": "oils",
+          "products_api": "https://www.lakshmiwholesale.com/collections/oils/products.json"
+        }
+      ]
+    },
+    {
+      "category_name": "JAGGERY SUGAR & SALT",
+      "subcategory_count": 4,
+      "subcategories": [
+        {
+          "name": "SALT",
+          "url": "https://www.lakshmiwholesale.com/collections/salt",
+          "relative_path": "/collections/salt",
+          "collection_slug": "salt",
+          "products_api": "https://www.lakshmiwholesale.com/collections/salt/products.json"
+        },
+        {
+          "name": "WHITE SUGAR",
+          "url": "https://www.lakshmiwholesale.com/collections/sugar",
+          "relative_path": "/collections/sugar",
+          "collection_slug": "sugar",
+          "products_api": "https://www.lakshmiwholesale.com/collections/sugar/products.json"
+        },
+        {
+          "name": "JAGGERY",
+          "url": "https://www.lakshmiwholesale.com/collections/jaggery",
+          "relative_path": "/collections/jaggery",
+          "collection_slug": "jaggery",
+          "products_api": "https://www.lakshmiwholesale.com/collections/jaggery/products.json"
+        },
+        {
+          "name": "PALM SUGAR",
+          "url": "https://www.lakshmiwholesale.com/collections/palm-sugar",
+          "relative_path": "/collections/palm-sugar",
+          "collection_slug": "palm-sugar",
+          "products_api": "https://www.lakshmiwholesale.com/collections/palm-sugar/products.json"
+        }
+      ]
+    },
+    {
+      "category_name": "PAPADAM & VADAGAM",
+      "subcategory_count": 3,
+      "subcategories": [
+        {
+          "name": "PAPADAM",
+          "url": "https://www.lakshmiwholesale.com/collections/papadam",
+          "relative_path": "/collections/papadam",
+          "collection_slug": "papadam",
+          "products_api": "https://www.lakshmiwholesale.com/collections/papadam/products.json"
+        },
+        {
+          "name": "VADAGAM",
+          "url": "https://www.lakshmiwholesale.com/collections/vadagam",
+          "relative_path": "/collections/vadagam",
+          "collection_slug": "vadagam",
+          "products_api": "https://www.lakshmiwholesale.com/collections/vadagam/products.json"
+        },
+        {
+          "name": "DRY VATHAL",
+          "url": "https://www.lakshmiwholesale.com/collections/dry-vathal",
+          "relative_path": "/collections/dry-vathal",
+          "collection_slug": "dry-vathal",
+          "products_api": "https://www.lakshmiwholesale.com/collections/dry-vathal/products.json"
+        }
+      ]
+    },
+    {
+      "category_name": "PICKLES & PASTE",
+      "subcategory_count": 3,
+      "subcategories": [
+        {
+          "name": "PICKLES",
+          "url": "https://www.lakshmiwholesale.com/collections/pickles",
+          "relative_path": "/collections/pickles",
+          "collection_slug": "pickles",
+          "products_api": "https://www.lakshmiwholesale.com/collections/pickles/products.json"
+        },
+        {
+          "name": "PASTE",
+          "url": "https://www.lakshmiwholesale.com/collections/pastes",
+          "relative_path": "/collections/pastes",
+          "collection_slug": "pastes",
+          "products_api": "https://www.lakshmiwholesale.com/collections/pastes/products.json"
+        },
+        {
+          "name": "THOKKU",
+          "url": "https://www.lakshmiwholesale.com/collections/thokku",
+          "relative_path": "/collections/thokku",
+          "collection_slug": "thokku",
+          "products_api": "https://www.lakshmiwholesale.com/collections/thokku/products.json"
+        }
+      ]
+    },
+    {
+      "category_name": "BEVERAGES",
+      "subcategory_count": 2,
+      "subcategories": [
+        {
+          "name": "TEA & COFFEE",
+          "url": "https://www.lakshmiwholesale.com/collections/tea-coffee",
+          "relative_path": "/collections/tea-coffee",
+          "collection_slug": "tea-coffee",
+          "products_api": "https://www.lakshmiwholesale.com/collections/tea-coffee/products.json"
+        },
+        {
+          "name": "SOFT DRINKS",
+          "url": "https://www.lakshmiwholesale.com/collections/soft-drinks",
+          "relative_path": "/collections/soft-drinks",
+          "collection_slug": "soft-drinks",
+          "products_api": "https://www.lakshmiwholesale.com/collections/soft-drinks/products.json"
+        }
+      ]
+    },
+    {
+      "category_name": "RAVA",
+      "subcategory_count": 2,
+      "subcategories": [
+        {
+          "name": "RAVA",
+          "url": "https://www.lakshmiwholesale.com/collections/rava",
+          "relative_path": "/collections/rava",
+          "collection_slug": "rava",
+          "products_api": "https://www.lakshmiwholesale.com/collections/rava/products.json"
+        },
+        {
+          "name": "MILLET RAVA",
+          "url": "https://www.lakshmiwholesale.com/collections/millet-rava",
+          "relative_path": "/collections/millet-rava",
+          "collection_slug": "millet-rava",
+          "products_api": "https://www.lakshmiwholesale.com/collections/millet-rava/products.json"
+        }
+      ]
+    },
+    {
+      "category_name": "FROZEN PRODUCTS",
+      "subcategory_count": 2,
+      "subcategories": [
+        {
+          "name": "FROZEN SEA FOODS",
+          "url": "https://www.lakshmiwholesale.com/collections/frozen-seafoods",
+          "relative_path": "/collections/frozen-seafoods",
+          "collection_slug": "frozen-seafoods",
+          "products_api": "https://www.lakshmiwholesale.com/collections/frozen-seafoods/products.json"
+        },
+        {
+          "name": "FROZEN PAROTTA",
+          "url": "https://www.lakshmiwholesale.com/collections/frozen-parotta",
+          "relative_path": "/collections/frozen-parotta",
+          "collection_slug": "frozen-parotta",
+          "products_api": "https://www.lakshmiwholesale.com/collections/frozen-parotta/products.json"
+        }
+      ]
+    }
+  ],
+  "total_categories": 11,
+  "total_subcategories": 41
+}
